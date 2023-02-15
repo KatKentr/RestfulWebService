@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,7 @@ public class UserController {
 		
 	}
 	
-	@PostMapping("/users")
+	@PostMapping("/users")   
 	public ResponseEntity<User> createUser(@RequestBody User user) {    //By using ResponseEntity we get status 201 Created back
 		User savedUser=service.save(user);
 		//return also the URI(location) of the user created e.g: /users/4 . The user can then type the Uri and get the details of the newly created user back
@@ -50,6 +51,15 @@ public class UserController {
 		URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
 		return ResponseEntity.created(location).build();
 		
+		
+	}
+	
+	
+	@DeleteMapping(path="/users/{id}")
+	public void deleteUser(@PathVariable int id){
+		
+		service.deleteById(id);
+	
 		
 	}
 
