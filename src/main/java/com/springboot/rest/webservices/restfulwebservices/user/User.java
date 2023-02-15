@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 
 public class User {
@@ -13,7 +15,10 @@ public class User {
 
 	private Integer id;
 	
+	@Size(min=2, message="Name should have at least 2 characters")
 	private String name;
+	
+	@Past(message="Birth date should be in the past")
 	private LocalDate date;
 	
 	

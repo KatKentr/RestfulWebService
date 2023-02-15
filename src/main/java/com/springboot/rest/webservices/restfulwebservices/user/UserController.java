@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class UserController {
 	
@@ -43,8 +45,9 @@ public class UserController {
 		
 	}
 	
-	@PostMapping("/users")   
-	public ResponseEntity<User> createUser(@RequestBody User user) {    //By using ResponseEntity we get status 201 Created back
+	@PostMapping("/users")
+	//the validations defined for the User object will be automatically invoked
+	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {    //By using ResponseEntity we get status 201 Created back
 		User savedUser=service.save(user);
 		//return also the URI(location) of the user created e.g: /users/4 . The user can then type the Uri and get the details of the newly created user back
 		//Whenever we want to write a URL of a created resource , we have to use the Location HTTP header
