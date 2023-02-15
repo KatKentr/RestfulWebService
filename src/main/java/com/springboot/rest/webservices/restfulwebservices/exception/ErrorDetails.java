@@ -1,15 +1,16 @@
 package com.springboot.rest.webservices.restfulwebservices.exception;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ErrorDetails {
 	
-	private LocalDate timestamp;
+	private LocalDateTime timestamp;
 	private String message;
 	private String details;
 	
 	
-	public ErrorDetails(LocalDate timestamp, String message, String details) {
+	public ErrorDetails(LocalDateTime timestamp, String message, String details) {
 		super();
 		this.timestamp = timestamp;
 		this.message = message;
@@ -17,7 +18,7 @@ public class ErrorDetails {
 	}
 
 
-	public LocalDate getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
 
