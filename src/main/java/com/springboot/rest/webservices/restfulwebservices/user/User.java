@@ -9,10 +9,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
-
-public class User {
+@Entity(name="user_details")     //tell JPA to manage this. User is a keyword in H2. We encountered error, so we change the table name
+public class User {              //the table will be automatically created when we launch the application, when we use the H2 database
 	
-
+    @Id
+    @GeneratedValue
 	private Integer id;
 	
 	@Size(min=2, message="Name should have at least 2 characters")
