@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.springboot.rest.webservices.restfulwebservices.user.Post;
 import com.springboot.rest.webservices.restfulwebservices.user.User;
 import com.springboot.rest.webservices.restfulwebservices.user.UserNotFoundException;
 
@@ -80,8 +81,19 @@ public class UserControllerJPA {
 		
 			
 		}
+		
+		//retrieve all posts of a user
+		@GetMapping(path="jpa/users/{id}/posts")
+		public List<Post> retrievePostsForAUser(@PathVariable int id){		  
+		   //we have to find the user first
+            Optional<User> user=userRepository.findById(id);
+			
+			if (user.isEmpty())
+				throw new UserNotFoundException("id:"+id);  //we want to return status 404 and a relevant message
+	      
+			return user.get().getPosts();
 
 	}
-	
+}
 
 

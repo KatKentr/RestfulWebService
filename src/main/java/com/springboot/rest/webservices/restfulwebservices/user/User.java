@@ -74,6 +74,15 @@ public class User {              //the table will be automatically created when 
 		this.date = date;
 	}
 
+	
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
+
 
 	@Override
 	public String toString() {

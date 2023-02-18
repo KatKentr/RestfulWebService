@@ -20,6 +20,11 @@ public class Post {
 	@ManyToOne(fetch= FetchType.LAZY)        //Lazy: when we fetch the post, we don't really want to fetch the user details that are associated with the post
 	@JsonIgnore
 	private User user;
+	
+	
+	private Post() {
+		
+	}
 
 	public Post(Integer id, String description, User user) {
 		super();
