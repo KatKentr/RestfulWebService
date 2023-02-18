@@ -1,10 +1,14 @@
 package com.springboot.rest.webservices.restfulwebservices.user;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -21,6 +25,11 @@ public class User {              //the table will be automatically created when 
 	
 	@Past(message="Birth date should be in the past")
 	private LocalDate date;
+	
+	//A user will have a list of posts
+	@OneToMany(mappedBy="user")   //the field in the Post class that owns this relationship
+	@JsonIgnore                //we don't want post to be part of the json reponses for the user bean
+	private List<Post> posts;
 	
 	
 	public User() {   //we need a default constructor hen we make use of jpa
