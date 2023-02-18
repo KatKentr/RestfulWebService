@@ -30,10 +30,12 @@ import jakarta.validation.Valid;
 public class UserControllerJPA {
 	
 	private UserRepository userRepository;
+	private PostRepository postRepository;
 	
-	public UserControllerJPA(UserRepository userRepository) { //constructor-based Injection
+	public UserControllerJPA(UserRepository userRepository, PostRepository postRepository) { //constructor-based Injection
 		
 		this.userRepository=userRepository;
+		this.postRepository=postRepository;
 	}
 	
 	@GetMapping(path= "/jpa/users")
@@ -94,6 +96,54 @@ public class UserControllerJPA {
 			return user.get().getPosts();
 
 	}
+		
+		//create a new Post for a specific user
+		@PostMapping(path="jpa/users/{id}/posts")
+		public ResponseEntity<Post> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post){		  
+		   //we have to find the user first
+            Optional<User> user=userRepository.findById(id);
+			
+			if (user.isEmpty())
+				throw new UserNotFoundException("id:"+id);  //we want to return status 404 and a relevant message
+	      
+			post.setUser(user.get()); //set the user of this post!
+			Post savedPost=postRepository.save(post);   //save the new post.
+			URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedPost.getId()).toUri(); //build the URI for the ne post
+			return ResponseEntity.created(location).build();
+
+	}
+		
+		//retrieve the details of a specific post
+		
+		@GetMapping(path="/jpa/users/{user_id}/posts/{id}")
+		public EntityModel<Post> retrievePost(@PathVariable int user_id,@PathVariable int id){
+			//check if user exists
+			Optional<User> user=userRepository.findById(user_id);
+			
+			if (user.isEmpty())
+				throw new UserNotFoundException("id:"+user_id);  //we want to return status 404 and a relevant message
+			//check is post exists
+			Optional<Post> post=postRepository.findById(id);
+			User userOfPost= post.get().getUser();  //get the User of this post
+			
+			if (post.isEmpty() || userOfPost.getId()!=user_id) { //if the post for this specified user does not exist
+				
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post with this id not found for thi user.");
+			}
+			
+			
+			EntityModel<Post> entityModel = EntityModel.of(post.get());
+			
+			//points to the method of the controller retrievePostsForAuser
+			WebMvcLinkBuilder link =  linkTo(methodOn(this.getClass()).retrievePostsForAUser(user_id));   //provide a link to the consumer of the API to inform on how to retrieve all posts of a user
+			entityModel.add(link.withRel("all-posts-from-user"));
+			
+			return entityModel;
+			
+		}
+		
+		
+		
 }
 
 
