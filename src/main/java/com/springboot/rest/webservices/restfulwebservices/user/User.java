@@ -23,7 +23,7 @@ public class User {              //the table will be automatically created when 
 	private LocalDate date;
 	
 	
-	public User() {
+	public User() {   //we need a default constructor hen we make use of jpa
 		
 	}
 	
