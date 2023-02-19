@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -27,7 +28,7 @@ public class User {              //the table will be automatically created when 
 	private LocalDate date;
 	
 	//A user will have a list of posts
-	@OneToMany(mappedBy="user")   //the field in the Post class that owns this relationship
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)   //the field in the Post class that owns this relationship. CascadeType.All and orphanRemoval true: Child entities (post) of a user (parent entity) will be deleted, when the user is deleted
 	@JsonIgnore                //we don't want post to be part of the json reponses for the user bean
 	private List<Post> posts;
 	
