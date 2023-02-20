@@ -1,0 +1,1 @@
+A REST API for a social media application built with Spring Boot. Connection to database using JPA
