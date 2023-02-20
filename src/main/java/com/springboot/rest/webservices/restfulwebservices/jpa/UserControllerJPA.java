@@ -142,6 +142,26 @@ public class UserControllerJPA {
 			
 		}
 		
+		//Delete a post
+		
+		@DeleteMapping(path="jpa/users/{user_id}/posts/{id}")
+		public void deletePost(@PathVariable int user_id,@PathVariable int id){
+					
+			 Optional<Post> post = postRepository.findById(id);
+			 User userOfPost= post.get().getUser();
+			 
+		        if(!post.isPresent() || userOfPost.getId()!=user_id){
+		            
+		            
+		            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post with this id not found for the user.");	
+		        }
+
+		       postRepository.deleteById(id);
+	          
+		        
+			
+		}
+		
 		
 		
 }
