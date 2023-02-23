@@ -1,10 +1,10 @@
-package com.springboot.rest.webservices.restfulwebservices.jpa;
+package com.springboot.rest.webservices.restfulwebservices.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.springboot.rest.webservices.restfulwebservices.user.Post;
-import com.springboot.rest.webservices.restfulwebservices.user.User;
+import com.springboot.rest.webservices.restfulwebservices.model.Post;
+import com.springboot.rest.webservices.restfulwebservices.model.User;
 
 //Repository to talk to the database
 public interface PostRepository extends JpaRepository<Post,Integer>{

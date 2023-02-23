@@ -1,4 +1,4 @@
-package com.springboot.rest.webservices.restfulwebservices.user;
+package com.springboot.rest.webservices.restfulwebservices.model;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

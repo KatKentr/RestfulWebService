@@ -1,4 +1,4 @@
-package com.springboot.rest.webservices.restfulwebservices.user;
+package com.springboot.rest.webservices.restfulwebservices.model;
 
 import java.time.LocalDate;
 import java.util.List;

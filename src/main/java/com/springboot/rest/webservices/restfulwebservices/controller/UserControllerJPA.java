@@ -1,4 +1,4 @@
-package com.springboot.rest.webservices.restfulwebservices.jpa;
+package com.springboot.rest.webservices.restfulwebservices.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.springboot.rest.webservices.restfulwebservices.user.Post;
-import com.springboot.rest.webservices.restfulwebservices.user.User;
-import com.springboot.rest.webservices.restfulwebservices.user.UserNotFoundException;
+import com.springboot.rest.webservices.restfulwebservices.model.Post;
+import com.springboot.rest.webservices.restfulwebservices.model.User;
+import com.springboot.rest.webservices.restfulwebservices.model.UserNotFoundException;
+import com.springboot.rest.webservices.restfulwebservices.repository.PostRepository;
+import com.springboot.rest.webservices.restfulwebservices.repository.UserRepository;
 
 import jakarta.validation.Valid;
 

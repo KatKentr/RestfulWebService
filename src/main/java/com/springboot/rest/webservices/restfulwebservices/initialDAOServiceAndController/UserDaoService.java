@@ -1,4 +1,4 @@
-package com.springboot.rest.webservices.restfulwebservices.user.dummyServiceAndController;
+package com.springboot.rest.webservices.restfulwebservices.initialDAOServiceAndController;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 import org.springframework.stereotype.Component;
 
-import com.springboot.rest.webservices.restfulwebservices.user.User;
+import com.springboot.rest.webservices.restfulwebservices.model.User;
 
 //DAO Service: Data Access object
 

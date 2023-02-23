@@ -1,4 +1,4 @@
-package com.springboot.rest.webservices.restfulwebservices.user.dummyServiceAndController;
+package com.springboot.rest.webservices.restfulwebservices.initialDAOServiceAndController;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.springboot.rest.webservices.restfulwebservices.user.User;
-import com.springboot.rest.webservices.restfulwebservices.user.UserNotFoundException;
+import com.springboot.rest.webservices.restfulwebservices.model.User;
+import com.springboot.rest.webservices.restfulwebservices.model.UserNotFoundException;
 
 import jakarta.validation.Valid;
 
