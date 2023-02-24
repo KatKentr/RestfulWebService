@@ -37,6 +37,13 @@ public class User {              //the table will be automatically created when 
 	@JsonIgnore                //we don't want post to be part of the json reponses for the user bean
 	private List<Post> posts;
 	
+	//A user may have multiple comments
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)   //the field in the Post class that owns this relationship. CascadeType.All and orphanRemoval true: Child entities (post) of a user (parent entity) will be deleted, when the user is deleted
+	@JsonIgnore                //we don't want post to be part of the json reponses for the user bean
+	private List<Comment> comments;
+	
+	
+	
 	
 	public User() {   //we need a default constructor hen we make use of jpa
 		
@@ -87,6 +94,17 @@ public class User {              //the table will be automatically created when 
 	
 	public List<Post> getPosts() {
 		return posts;
+	}
+	
+	//comments
+	
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 
