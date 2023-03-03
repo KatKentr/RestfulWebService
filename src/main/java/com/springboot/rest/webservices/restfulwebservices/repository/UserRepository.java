@@ -11,9 +11,9 @@ import com.springboot.rest.webservices.restfulwebservices.model.User;
 public interface UserRepository extends JpaRepository<User,Integer>{
 	
 	 Optional<User> findByEmail(String email);
-	    Optional<User> findByUsernameOrEmail(String name, String email);
-	    Optional<User> findByUsername(String name);
-	    Boolean existsByUsername(String name);
+	    Optional<User> findByUsernameOrEmail(String username, String email);
+	    Optional<User> findByUsername(String username);
+	    Boolean existsByUsername(String username);
 	    Boolean existsByEmail(String email);
 
 }

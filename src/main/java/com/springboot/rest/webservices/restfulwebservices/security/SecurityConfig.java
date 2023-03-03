@@ -47,8 +47,8 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(
 												
 				auth ->auth
-				.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-				.requestMatchers("/api/auth/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/app/**").permitAll()  //this could be removed?
+				.requestMatchers("/app/**").permitAll()
 				.anyRequest().authenticated()
 				);
 	//We want to enable basic authentication
