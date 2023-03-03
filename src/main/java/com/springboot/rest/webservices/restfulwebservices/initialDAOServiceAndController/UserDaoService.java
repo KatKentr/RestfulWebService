@@ -23,9 +23,9 @@ public class UserDaoService {
 	
 	static {      //whenever the server restarts we only have these three users
 		
-		users.add(new User(++usersCount,"Adam",LocalDate.now().minusYears(30)));
-		users.add(new User(++usersCount,"Adam",LocalDate.now().minusYears(25)));
-		users.add(new User(++usersCount,"Jim",LocalDate.now().minusYears(20)));
+//		users.add(new User(++usersCount,"Adam",LocalDate.now().minusYears(30)));
+//		users.add(new User(++usersCount,"Adam",LocalDate.now().minusYears(25)));
+//		users.add(new User(++usersCount,"Jim",LocalDate.now().minusYears(20)));
 	}
 	
 	
