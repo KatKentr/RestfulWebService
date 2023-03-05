@@ -23,8 +23,7 @@ public class Comment {
 	@JsonIgnore
 	private User user;
 	
-	@ManyToOne(fetch= FetchType.LAZY)        //Lazy: when we fetch the comment, we don't really want to fetch the user details that are associated with the post
-	//@JsonIgnore
+	@ManyToOne()        //Lazy: when we fetch a comment, we also fetch the post related to the comment
 	private Post post;
 	
 	
