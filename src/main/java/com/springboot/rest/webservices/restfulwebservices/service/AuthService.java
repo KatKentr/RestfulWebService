@@ -3,6 +3,7 @@ package com.springboot.rest.webservices.restfulwebservices.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.springboot.rest.webservices.restfulwebservices.model.User;
 import com.springboot.rest.webservices.restfulwebservices.payload.LoginDto;
@@ -70,7 +71,14 @@ public class AuthService {
 	}
 	
 	
+	//retrieve current user
+	public User getCurrentUser() {
+        var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"E-mail not found"));
+    }
 	
+	
+
 	
 
 }

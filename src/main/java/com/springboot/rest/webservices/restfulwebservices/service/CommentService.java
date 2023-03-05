@@ -23,17 +23,20 @@ public class CommentService {
 	private UserService userService;     //related to the userService. Maybe to be avoided? Use only methods of the repository?
 	private PostRepository postRepository;
 	private UserRepository userRepository;
+	private AuthService authService;
 
-	public CommentService(CommentRepository commentRepository,UserService userService, PostRepository postRepository) {
+	public CommentService(CommentRepository commentRepository,UserService userService, PostRepository postRepository,AuthService authService,UserRepository userRepository) {
 		super();
 		this.commentRepository = commentRepository;
 		this.userService = userService;
 		this.postRepository=postRepository;
+		this.authService=authService;
+		this.userRepository=userRepository;
 	}
 	
 	public List<Comment> getCommentsFromUser(int UserId){		//get all comments of a user
 		//we have to find the user first		
-        Optional<User> user=userService.getUserById(UserId);       //Use the method of the UserRepository findByID instead?
+        Optional<User> user=userRepository.findById(UserId);       //Use the method of the UserRepository findByID instead?
         
 		return user.get().getComments();   //return user's posts
 		
@@ -53,14 +56,11 @@ public class CommentService {
 	}
 	
 	
-	public Comment saveNewComment(Comment comment, int userId, int postId) {  //save a new comment
+	public Comment saveNewComment(Comment comment, int postId) {  //save a new comment
 		
 		//relate the new comment to a user and to a post
-		Optional<User> commentUser=userRepository.findById(userId);
-        if (commentUser.isEmpty()) { //if the post does not exist
-			
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with this id not ");
-		}
+		User commentUser=authService.getCurrentUser();
+    
 				
 		Optional<Post> post=postRepository.findById(postId);
         if (post.isEmpty()) { //if the post does not exist
@@ -68,7 +68,7 @@ public class CommentService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post with this id not ");
 		}
         
-        comment.setUser(commentUser.get());
+        comment.setUser(commentUser);
         comment.setPost(post.get());
         Comment newComment=commentRepository.save(comment);
         

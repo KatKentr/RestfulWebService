@@ -35,7 +35,7 @@ public class Post {
 		
 	
 	
-	private Post() {
+	public Post() {
 		
 	}
 
