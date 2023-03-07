@@ -11,6 +11,8 @@ import com.springboot.rest.webservices.socialmediaapp.payload.LoginDto;
 import com.springboot.rest.webservices.socialmediaapp.payload.SignUpDto;
 import com.springboot.rest.webservices.socialmediaapp.service.AuthService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class AuthController {
 	
@@ -24,12 +26,12 @@ public class AuthController {
 
   
     @PostMapping(ApiRoutes.Auth.LOGIN)
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginDto loginDto){
        return authService.login(loginDto);
     }
     
     @PostMapping(ApiRoutes.Auth.REGISTER)
-    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpDto){
     	
     	return authService.register(signUpDto);
 

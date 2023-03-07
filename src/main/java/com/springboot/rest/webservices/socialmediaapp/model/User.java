@@ -20,23 +20,20 @@ import jakarta.validation.constraints.Size;
 
 
 //@Builder
-@Entity(name="user_details")     //tell JPA to manage this. User is a keyword in H2. We encountered error, so we change the table name
-public class User {              //the table will be automatically created when we launch the application, when we use the H2 database
+@Entity(name="user_details")     //User is a keyword in postgres and h2. Errors encountered, hence table name should be changed
+public class User {              
 	
     @Id
     @GeneratedValue
 	private Integer id;
 	
-	@Size(min=2, message="Name should have at least 2 characters")
+
 	@Column(name="name")
 	//private String name;
 	private String username;
 	
-	@Past(message="Birth date should be in the past")
 	private LocalDate date;
 	
-	
-	//add validatios for these
 	private String email;
 	private String password;
 	
@@ -47,14 +44,14 @@ public class User {              //the table will be automatically created when 
 	private List<Post> posts;
 	
 	//A user may have multiple comments
-	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)   //the field in the Post class that owns this relationship. CascadeType.All and orphanRemoval true: Child entities (post) of a user (parent entity) will be deleted, when the user is deleted
+	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)   //the field in the Comment class that owns this relationship. CascadeType.All and orphanRemoval true: Child entities (comment) of a user (parent entity) will be deleted, when the user is deleted
 	@JsonIgnore                //we don't want post to be part of the json reponses for the user bean
 	private List<Comment> comments;
 	
 	private String  roles;
 	
 	
-	public User() {   //we need a default constructor hen we make use of jpa
+	public User() {   //we need a default constructor when we make use of jpa
 		
 	}
 	

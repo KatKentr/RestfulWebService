@@ -2,33 +2,49 @@ package com.springboot.rest.webservices.socialmediaapp.payload;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 public class SignUpDto {
 	
-	private LocalDate date;
-    private String name;
+	@Past(message="Birth date should be in the past")
+	private LocalDate birthDate;
+	
+	@Size(min=2, message="Name should have at least 2 characters")
+    private String username;
+	
+	@Email(message = "Email should be valid")
+	@NotEmpty(message = "Email cannot be empty")
     private String email;
+	
+	@Size(min=4, message="Password should be at least 4 characters")
+	@NotEmpty(message = "Password cannot be empty")
     private String password;
-    private String role;
+	
+	@NotEmpty                 //an initial naive approach for roles
+    private String roles;
     
-	public SignUpDto(LocalDate date, String name, String email, String password, String role) {
+	public SignUpDto(LocalDate birthDate, String username, String email, String password, String roles) {
 		super();
-		this.date = date;
-		this.name = name;
+		this.birthDate = birthDate;
+		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.role=role;
+		this.roles=roles;
 	}
 	public LocalDate getDate() {
-		return date;
+		return birthDate;
 	}
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
 	}
 	public String getName() {
-		return name;
+		return username;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String username) {
+		this.username = username;
 	}
 	public String getEmail() {
 		return email;
@@ -43,10 +59,10 @@ public class SignUpDto {
 		this.password = password;
 	}
 	public String getRoles() {
-		return role;
+		return roles;
 	}
-	public void setRoles(String role) {
-		this.role = role;
+	public void setRoles(String roles) {
+		this.roles = roles;
 	}
     
     
