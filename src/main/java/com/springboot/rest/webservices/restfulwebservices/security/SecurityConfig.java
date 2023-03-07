@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.springboot.rest.webservices.restfulwebservices.constants.ApiRoutes;
+
 
 //We ovwrwrite the default Spring SecurityFilterChain
 @Configuration
@@ -47,8 +49,8 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(
 												
 				auth ->auth
-				.requestMatchers(HttpMethod.GET, "/app/**").permitAll()  //this could be removed?
-				.requestMatchers("/app/**").permitAll()
+				.requestMatchers(ApiRoutes.Auth.REGISTER).permitAll()
+				.requestMatchers(ApiRoutes.Auth.LOGIN).permitAll()
 				.anyRequest().authenticated()
 				);
 	//We want to enable basic authentication

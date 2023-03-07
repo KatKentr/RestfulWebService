@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.rest.webservices.restfulwebservices.constants.ApiRoutes;
 import com.springboot.rest.webservices.restfulwebservices.payload.LoginDto;
 import com.springboot.rest.webservices.restfulwebservices.payload.SignUpDto;
 import com.springboot.rest.webservices.restfulwebservices.service.AuthService;
 
 @RestController
-@RequestMapping("/app")
 public class AuthController {
 	
 
@@ -23,12 +23,12 @@ public class AuthController {
     }
 
   
-    @PostMapping("/signin")
+    @PostMapping(ApiRoutes.Auth.LOGIN)
     public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
        return authService.login(loginDto);
     }
     
-    @PostMapping("/signup")
+    @PostMapping(ApiRoutes.Auth.REGISTER)
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
     	
     	return authService.register(signUpDto);

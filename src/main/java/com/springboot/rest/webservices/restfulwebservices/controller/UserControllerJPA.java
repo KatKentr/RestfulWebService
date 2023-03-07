@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.springboot.rest.webservices.restfulwebservices.constants.ApiRoutes;
 import com.springboot.rest.webservices.restfulwebservices.model.Post;
 import com.springboot.rest.webservices.restfulwebservices.model.User;
 import com.springboot.rest.webservices.restfulwebservices.model.UserNotFoundException;
@@ -41,7 +42,7 @@ public class UserControllerJPA {
 
 	}
 
-	@GetMapping(path = "/jpa/users")
+	@GetMapping(ApiRoutes.User.GET_ALL)
 	public List<User> retrieveAllUsers() {
 
 		return userService.getAllUsers();
@@ -49,7 +50,7 @@ public class UserControllerJPA {
 
 	// we wrap the User class and create an EntityModel in order to use Spring
 	// HATEOAS: Generate HAL responses with hyperlinks to resources
-	@GetMapping(path = "/jpa/users/{id}")
+	@GetMapping(ApiRoutes.User.GET_BY_ID)
 	public EntityModel<User> retrieveUser(@PathVariable int id) {
 
 		Optional<User> user = userService.getUserById(id);
