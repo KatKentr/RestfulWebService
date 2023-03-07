@@ -35,6 +35,8 @@ public class User {
 	private LocalDate date;
 	
 	private String email;
+	
+	@JsonIgnore  //when retrieving user data, do not include password in the json response
 	private String password;
 	
 	
