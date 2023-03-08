@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.springboot.rest.webservices.socialmediaapp.constants.ApiRoutes;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.service.PostService;
 
@@ -35,20 +36,20 @@ public class PostControllerJPA {
 	}
 
 	// retrieve all posts of a user
-	@GetMapping(path = "jpa/users/{id}/posts")
-	public List<Post> retrievePostsForAUser(@PathVariable int id) {
+	@GetMapping(ApiRoutes.Post.GET_BY_USERID)
+	public List<Post> retrievePostsForAUser(@PathVariable int userId) {
 
-		return postService.getPostsFromUser(id);
+		return postService.getPostsFromUser(userId);
 
 	}
 
-	// create a new Post for a specific user
-	@PostMapping(path = "jpa/users/{id}/posts")
-	public ResponseEntity<Post> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post) {
+	// create a new Post
+	@PostMapping(ApiRoutes.Post.CREATE)
+	public ResponseEntity<Post> createPostForUser(@Valid @RequestBody Post post) {
 
-		Post newPost = postService.saveNewPost(id, post);
+		Post newPost = postService.saveNewPost(post);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newPost.getId())
-				.toUri(); // build the URI for the ne post
+				.toUri(); // build the URI for the new post
 		return ResponseEntity.created(location).build();
 
 	}

@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
-import com.springboot.rest.webservices.socialmediaapp.model.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.repository.PostRepository;
 import com.springboot.rest.webservices.socialmediaapp.repository.UserRepository;
 
@@ -20,6 +20,7 @@ public class PostService {
 	UserRepository userRepository;
 	
 	UserService userService;
+	AuthService authService;
 	
 	
 	public PostService(PostRepository postRepository,UserRepository userRepository,UserService userService) {
@@ -31,17 +32,17 @@ public class PostService {
 	
 	public List<Post> getPostsFromUser(int UserId){		//get all posts of a user
 		//we have to find the user first		
-        Optional<User> user=userService.getUserById(UserId);
+		var user=userRepository.findById(UserId).orElseThrow(()-> new UserNotFoundException("id: "+UserId));
         
-		return user.get().getPosts();   //return user's posts
+		return user.getPosts();   //return user's posts
 		
 	}
 	
 	//Would this approach be more correct? method arguments: int userId, String description, instantiate the new Post object and then save it?
-	public Post saveNewPost(int UserId, Post post) {                //add a new post for a user
+	public Post saveNewPost(Post post) {                //add a new post for a user
 	    //find the user
-		Optional<User> user=userService.getUserById(UserId);
-		post.setUser(user.get());   //relate the post to the user
+		User user=authService.getCurrentUser();
+		post.setUser(user);   //relate the post to the user
 		Post newPost= postRepository.save(post);   //save the new post.
 		return newPost;
 						
