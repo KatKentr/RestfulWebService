@@ -50,7 +50,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {    //attempt to display an appropriate error message for invalid input to post request for a new user. Did not work though
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
 				"Total Errors:" + ex.getErrorCount() + " First Error:" + ex.getFieldError().getDefaultMessage(), request.getDescription(false));
-		return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
 }
