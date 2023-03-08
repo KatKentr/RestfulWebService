@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.springboot.rest.webservices.socialmediaapp.model.UserNotFoundException;
-
 
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler{
@@ -35,6 +33,15 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 				ex.getMessage(), request.getDescription(false));    //we are making use of our own custom exception structure and we are returning it back as the response
 		
 		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+		
+	}
+	
+	@ExceptionHandler({DuplicateEmailException.class,DuplicateUsernameException.class})   //we want to handle the eception User not found: returns 404
+	public final ResponseEntity<ErrorDetails> handleDuplicateException(Exception ex, WebRequest request) throws Exception {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
+				ex.getMessage(), request.getDescription(false));    //we are making use of our own custom exception structure and we are returning it back as the response
+		
+		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.CONFLICT);
 		
 	}
 	

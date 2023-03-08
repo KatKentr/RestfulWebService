@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.DuplicateEmailException;
+import com.springboot.rest.webservices.socialmediaapp.exception.DuplicateUsernameException;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
 import com.springboot.rest.webservices.socialmediaapp.payload.LoginDto;
 import com.springboot.rest.webservices.socialmediaapp.payload.SignUpDto;
@@ -43,17 +45,17 @@ public class AuthService {
 	}
 
 
-	public ResponseEntity<String> register(SignUpDto signUpDto) {
+	public User register(SignUpDto signUpDto) {
 		
 		
 		// add check for username exists in a DB
         if(userRepository.existsByUsername(signUpDto.getName())){
-            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
+            throw new DuplicateUsernameException();
         }
 
         // add check for email exists in DB
         if(userRepository.existsByEmail(signUpDto.getEmail())){
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+        	throw new DuplicateEmailException();
         }
 
         // create user object
@@ -64,10 +66,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         user.setRoles(signUpDto.getRoles());
         
-        userRepository.save(user);
-
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
-    			
+        return userRepository.save(user);
+   			
 	}
 	
 	

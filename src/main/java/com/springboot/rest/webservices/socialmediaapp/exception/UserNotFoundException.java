@@ -1,4 +1,4 @@
-package com.springboot.rest.webservices.socialmediaapp.model;
+package com.springboot.rest.webservices.socialmediaapp.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserNotFoundException extends RuntimeException {
 	
 	public UserNotFoundException(String message) {
-		super(message);
+		super("User with " +message+ " not found");
 	}
 
 }

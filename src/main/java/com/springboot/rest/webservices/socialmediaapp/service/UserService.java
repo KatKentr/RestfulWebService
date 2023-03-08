@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
-import com.springboot.rest.webservices.socialmediaapp.model.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.repository.UserRepository;
 
 //Would it be beneficial to make the UserService an interface and provide implementation(s) for the Interface?
@@ -38,7 +38,7 @@ public class UserService {
 		Optional<User> user=userRepository.findById(id);
 		
 		if (user.isEmpty())
-			throw new UserNotFoundException("id:"+id);
+			throw new UserNotFoundException("id: "+id);
 	
 	   return user;	
     }
