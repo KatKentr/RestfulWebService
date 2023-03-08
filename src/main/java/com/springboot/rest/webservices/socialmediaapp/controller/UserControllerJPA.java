@@ -65,8 +65,8 @@ public class UserControllerJPA {
 
 	}
 
-	
-	@DeleteMapping(path = "jpa/users/{id}")
+	//TO DO: Only users with role ADMIN will be able to delete users
+	@DeleteMapping(ApiRoutes.User.GET_BY_ID)
 	public void deleteUser(@PathVariable int id) {
 
 		userService.deleteUser(id);
