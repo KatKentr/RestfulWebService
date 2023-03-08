@@ -23,11 +23,12 @@ public class PostService {
 	AuthService authService;
 	
 	
-	public PostService(PostRepository postRepository,UserRepository userRepository,UserService userService) {
+	public PostService(PostRepository postRepository,UserRepository userRepository,UserService userService,AuthService authService) {
 		this.postRepository=postRepository;
 		this.userRepository=userRepository;
 		
 		this.userService=userService;
+		this.authService=authService;
 	}
 	
 	public List<Post> getPostsFromUser(int UserId){		//get all posts of a user
