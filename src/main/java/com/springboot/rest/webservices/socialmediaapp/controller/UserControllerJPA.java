@@ -21,9 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.springboot.rest.webservices.socialmediaapp.constants.ApiRoutes;
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
-import com.springboot.rest.webservices.socialmediaapp.model.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.repository.PostRepository;
 import com.springboot.rest.webservices.socialmediaapp.repository.UserRepository;
 import com.springboot.rest.webservices.socialmediaapp.service.PostService;
@@ -65,22 +65,7 @@ public class UserControllerJPA {
 
 	}
 
-	@PostMapping("/jpa/users")
-	// the validations defined for the User object will be automatically invoked
-	public ResponseEntity<User> createUser(@Valid @RequestBody User user) { // By using ResponseEntity we get status 201
-																			// Created back
-
-		User savedUser = userService.saveUser(user);
-		// return also the URI(location) of the user created e.g: /users/4 . The user
-		// can then type the Uri and get the details of the newly created user back
-		// Whenever we want to write a URL of a created resource , we have to use the
-		// Location HTTP header
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
-				.toUri();
-		return ResponseEntity.created(location).build();
-
-	}
-
+	
 	@DeleteMapping(path = "jpa/users/{id}")
 	public void deleteUser(@PathVariable int id) {
 

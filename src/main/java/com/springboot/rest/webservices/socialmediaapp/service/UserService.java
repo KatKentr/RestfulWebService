@@ -21,11 +21,6 @@ public class UserService {
 			
 	}
 	
-	public User saveUser(User user) {      //save a new user
-		
-		return userRepository.save(user);     //Should the validation of the username take place at the Service layer or at the controller?
-				
-	}
 	
 	public List<User> getAllUsers() {     //get all users
 		

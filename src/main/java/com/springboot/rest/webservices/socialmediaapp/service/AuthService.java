@@ -45,7 +45,7 @@ public class AuthService {
 	}
 
 
-	public User register(SignUpDto signUpDto) {
+	public void register(SignUpDto signUpDto) {
 		
 		
 		// add check for username exists in a DB
@@ -66,7 +66,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         user.setRoles(signUpDto.getRoles());
         
-        return userRepository.save(user);
+        userRepository.save(user);
    			
 	}
 	
