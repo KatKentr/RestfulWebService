@@ -50,9 +50,20 @@ public class PostControllerJPA {
 		Post newPost = postService.saveNewPost(post);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newPost.getId())
 				.toUri(); // build the URI for the new post
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.created(location).build();  //Location HTTP header
 
 	}
+	
+	//retrieve all posts
+	@GetMapping(ApiRoutes.Post.GET_ALL)
+	public List<Post> retrieveAllPosts(){
+		
+		return postService.getAllPosts();
+	}
+	
+	
+	
+	
 
 	// retrieve the details of a specific post
 

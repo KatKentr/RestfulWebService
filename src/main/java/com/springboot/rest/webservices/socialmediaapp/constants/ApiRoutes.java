@@ -23,6 +23,7 @@ public class ApiRoutes {
 	public static class Post {
 
 		private static final String prefix = versionPrefix + "/posts";
+		public static final String GET_ALL = prefix;
 		public static final String CREATE = prefix;
 		public static final String GET_BY_ID = prefix + "/{id}";
 		public static final String GET_BY_USERID = versionPrefix+ "/users/{userId}"+"/posts";

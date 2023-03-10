@@ -49,6 +49,14 @@ public class PostService {
 						
 	}
 	
+	
+	public List<Post> getAllPosts() {  //get all posts
+		
+		return postRepository.findAll();
+		
+	}
+	
+	
 	public Optional<Post> getPostDetails(int userId,int postId) {    //retrieve a post
 		//find the user
 		Optional<User> user=userService.getUserById(userId);
@@ -71,6 +79,8 @@ public class PostService {
 		postRepository.deleteById(postId);
 		
 	}
+
+
 	
 	
 	
