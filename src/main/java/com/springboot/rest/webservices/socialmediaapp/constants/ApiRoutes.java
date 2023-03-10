@@ -33,10 +33,10 @@ public class ApiRoutes {
 
 	public static class Comment {
 
-		public static final String CREATE = versionPrefix + "posts/{postId}/comments";
-		public static final String GET_BY_POST = versionPrefix + "posts/{postId}/comments";
-		public static final String GET_BY_ID = versionPrefix + "posts/{postId}/comments/{commentId}";
-		public static final String GET_BY_USERID = versionPrefix + "users/{userId}/comments";
+		public static final String CREATE = versionPrefix + "/posts/{postId}/comments";
+		public static final String GET_BY_POST = versionPrefix + "/posts/{postId}/comments";
+		public static final String GET_BY_ID = versionPrefix + "/posts/{postId}/comments/{commentId}";
+		public static final String GET_BY_USERID = versionPrefix + "/users/{userId}/comments";
 	}
 
  }

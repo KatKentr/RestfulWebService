@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.springboot.rest.webservices.socialmediaapp.constants.ApiRoutes;
 import com.springboot.rest.webservices.socialmediaapp.model.Comment;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.service.CommentService;
@@ -29,9 +30,9 @@ public class CommentControllerJPA {
 	}
 
 	// retrieve all comments of a USER
-	@GetMapping(path = "jpa/users/{userId}/comments")
+	@GetMapping(ApiRoutes.Comment.GET_BY_USERID)
 	public List<Comment> retrieveCommentsOfUser(@PathVariable int userId) {
-       //TO DO: check that user exists!
+
 		return commentService.getCommentsFromUser(userId);
 
 	}

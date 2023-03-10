@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Comment;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
@@ -34,11 +35,16 @@ public class CommentService {
 		this.userRepository=userRepository;
 	}
 	
-	public List<Comment> getCommentsFromUser(int UserId){		//get all comments of a user
+	public List<Comment> getCommentsFromUser(int userId){		//get all comments of a user
 		//we have to find the user first		
-        Optional<User> user=userRepository.findById(UserId);       //Use the method of the UserRepository findByID instead?
+        Optional<User> user=userRepository.findById(userId);
         
-		return user.get().getComments();   //return user's posts
+        if (user.isEmpty()) {
+        	
+        	throw new UserNotFoundException("id: "+ userId);
+        }
+        
+		return user.get().getComments();   //return user's comments
 		
 	}
 	
