@@ -26,6 +26,7 @@ public class ApiRoutes {
 		public static final String GET_ALL = prefix;
 		public static final String CREATE = prefix;
 		public static final String GET_BY_ID = prefix + "/{id}";
+		public static final String DELETE_BY_ID = prefix + "/{id}";
 		public static final String GET_BY_USERID = versionPrefix+ "/users/{userId}"+"/posts";
 
 	}

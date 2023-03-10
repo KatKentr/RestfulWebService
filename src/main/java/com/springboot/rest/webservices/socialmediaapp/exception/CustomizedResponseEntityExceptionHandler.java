@@ -28,7 +28,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	}
 	
 	@ExceptionHandler({UserNotFoundException.class,PostNotFoundException.class})   //we want to handle the eception User not found: returns 404
-	public final ResponseEntity<ErrorDetails> handleUserNotFoundException(Exception ex, WebRequest request) throws Exception {
+	public final ResponseEntity<ErrorDetails> handleResourceNotFoundException(Exception ex, WebRequest request) throws Exception {
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
 				ex.getMessage(), request.getDescription(false));    //we are making use of our own custom exception structure and we are returning it back as the response
 		
@@ -36,12 +36,21 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		
 	}
 	
-	@ExceptionHandler({DuplicateEmailException.class,DuplicateUsernameException.class})   //we want to handle the eception User not found: returns 404
+	@ExceptionHandler({DuplicateEmailException.class,DuplicateUsernameException.class})   // returns 409
 	public final ResponseEntity<ErrorDetails> handleDuplicateException(Exception ex, WebRequest request) throws Exception {
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
 				ex.getMessage(), request.getDescription(false));    //we are making use of our own custom exception structure and we are returning it back as the response
 		
 		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.CONFLICT);
+		
+	}
+	
+	@ExceptionHandler(UserNotAllowedException.class)   //returns 403
+	public final ResponseEntity<ErrorDetails> handlePermissionException(Exception ex, WebRequest request) throws Exception {
+		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
+				ex.getMessage(), request.getDescription(false));    //we are making use of our own custom exception structure and we are returning it back as the response
+		
+		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.FORBIDDEN);
 		
 	}
 	

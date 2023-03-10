@@ -82,7 +82,19 @@ public class PostControllerJPA {
 			
 	}
 	
+	// Users that are not admins, will be able to delete only their own posts
 
+	@DeleteMapping(ApiRoutes.Post.DELETE_BY_ID)
+	public void deletePost(@PathVariable int id) {
+
+		postService.deletePostOfUserById(id);
+
+	}
+	
+
+	
+	//TO THINK: Could we provide two routes to the same resource?
+	//e.g: app/v1/users/{userId}/posts/{postId}  + app/v1/posts/{postId}
 	// retrieve the details of a specific post
 
 //	@GetMapping(path = "/jpa/users/{userId}/posts/{PostId}")
@@ -101,13 +113,6 @@ public class PostControllerJPA {
 //
 //	}
 
-	// TO MODIFY: Users that are not admins, will be able to delete only their own posts
 
-//	@DeleteMapping(path = "jpa/users/{user_id}/posts/{id}")
-//	public void deletePost(@PathVariable int user_id, @PathVariable int id) {
-//
-//		postService.deletePostOfUserById(user_id, id);
-//
-//	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.springboot.rest.webservices.socialmediaapp.exception.PostNotFoundException;
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotAllowedException;
 import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
@@ -72,12 +73,26 @@ public class PostService {
 					
 	}
 	
-//	public void deletePostOfUserById(int userId, int postId) {  //delete a user's post
-//		
-//		Optional<Post> post=getPostDetails(userId,postId);
-//		postRepository.deleteById(postId);
-//		
-//	}
+	//TO DO: differentiate between roles: ADMIN and USER_ROLE
+	public void deletePostOfUserById(int postId) {  //delete a user's post
+		
+		Optional<Post> post=getPostDetails(postId);
+        if (post.isEmpty()) { //if the post does not exist
+			
+			throw new PostNotFoundException("id: "+postId);
+		}
+        
+		User userOfPost=post.get().getUser();
+		User currentUser=authService.getCurrentUser();
+		if (userOfPost.getId() != currentUser.getId()){   //users are able to delete only their own posts
+			
+			throw new UserNotAllowedException();
+			
+		}
+		
+		postRepository.deleteById(postId);
+		
+	}
 
 
 	
