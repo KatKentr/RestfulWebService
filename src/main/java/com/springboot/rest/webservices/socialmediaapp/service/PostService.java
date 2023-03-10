@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.PostNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
@@ -57,28 +58,26 @@ public class PostService {
 	}
 	
 	
-	public Optional<Post> getPostDetails(int userId,int postId) {    //retrieve a post
-		//find the user
-		Optional<User> user=userService.getUserById(userId);
+	public Optional<Post> getPostDetails(int postId) {    //retrieve a post
+	
 		//check is post exists
 		Optional<Post> post=postRepository.findById(postId);
-		User userOfPost= post.get().getUser();  //get the User of this post
 		
-		if (post.isEmpty() || userOfPost.getId()!=userId) { //if the post for this specified user does not exist
+		if (post.isEmpty()) { //if the post does not exist
 			
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post with this id not found for this user.");
+			throw new PostNotFoundException("id: "+postId);
 		}
 		
 		return post;
 					
 	}
 	
-	public void deletePostOfUserById(int userId, int postId) {  //delete a user's post
-		
-		Optional<Post> post=getPostDetails(userId,postId);
-		postRepository.deleteById(postId);
-		
-	}
+//	public void deletePostOfUserById(int userId, int postId) {  //delete a user's post
+//		
+//		Optional<Post> post=getPostDetails(userId,postId);
+//		postRepository.deleteById(postId);
+//		
+//	}
 
 
 	

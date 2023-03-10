@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.springboot.rest.webservices.socialmediaapp.constants.ApiRoutes;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
+import com.springboot.rest.webservices.socialmediaapp.model.User;
 import com.springboot.rest.webservices.socialmediaapp.service.PostService;
 
 import jakarta.validation.Valid;
@@ -61,35 +62,52 @@ public class PostControllerJPA {
 		return postService.getAllPosts();
 	}
 	
-	
-	
+	// retrieve the details of a specific post
+	@GetMapping(ApiRoutes.Post.GET_BY_ID)
+	public EntityModel<Post> getPostDetails(@PathVariable int id) {
+		
+		Optional<Post> post = postService.getPostDetails(id);
+		User userOfPost=post.get().getUser(); //get the user of this post
+		int userId=userOfPost.getId();
+		
+		EntityModel<Post> entityModel = EntityModel.of(post.get());
+		
+		// points to the method of the controller retrievePostsForAuser
+		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePostsForAUser(userId)); // provide a link to  the consumer of the API to inform on how to retrieve all posts of this user	
+																									
+		entityModel.add(link.withRel("all-posts-from-this-user"));
+
+		return entityModel;
+		
+			
+	}
 	
 
 	// retrieve the details of a specific post
 
-	@GetMapping(path = "/jpa/users/{userId}/posts/{PostId}")
-	public EntityModel<Post> retrievePost(@PathVariable int userId, @PathVariable int PostId) {
+//	@GetMapping(path = "/jpa/users/{userId}/posts/{PostId}")
+//	public EntityModel<Post> retrievePost(@PathVariable int userId, @PathVariable int PostId) {
+//
+//		Optional<Post> post = postService.getPostDetails(userId, PostId);
+//
+//		EntityModel<Post> entityModel = EntityModel.of(post.get());
+//
+//		// points to the method of the controller retrievePostsForAuser
+//		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePostsForAUser(userId)); // provide a link to  the consumer of the API to inform on how to retrieve all posts of a user	
+//																							
+//		entityModel.add(link.withRel("all-posts-from-user"));
+//
+//		return entityModel;
+//
+//	}
 
-		Optional<Post> post = postService.getPostDetails(userId, PostId);
+	// TO MODIFY: Users that are not admins, will be able to delete only their own posts
 
-		EntityModel<Post> entityModel = EntityModel.of(post.get());
-
-		// points to the method of the controller retrievePostsForAuser
-		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePostsForAUser(userId)); // provide a link to  the consumer of the API to inform on how to retrieve all posts of a user	
-																							
-		entityModel.add(link.withRel("all-posts-from-user"));
-
-		return entityModel;
-
-	}
-
-	// Delete a post
-
-	@DeleteMapping(path = "jpa/users/{user_id}/posts/{id}")
-	public void deletePost(@PathVariable int user_id, @PathVariable int id) {
-
-		postService.deletePostOfUserById(user_id, id);
-
-	}
+//	@DeleteMapping(path = "jpa/users/{user_id}/posts/{id}")
+//	public void deletePost(@PathVariable int user_id, @PathVariable int id) {
+//
+//		postService.deletePostOfUserById(user_id, id);
+//
+//	}
 
 }

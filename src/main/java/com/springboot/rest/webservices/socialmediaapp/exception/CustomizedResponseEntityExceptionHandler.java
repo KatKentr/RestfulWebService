@@ -27,7 +27,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		
 	}
 	
-	@ExceptionHandler(UserNotFoundException.class)   //we want to handle the eception User not found: returns 404
+	@ExceptionHandler({UserNotFoundException.class,PostNotFoundException.class})   //we want to handle the eception User not found: returns 404
 	public final ResponseEntity<ErrorDetails> handleUserNotFoundException(Exception ex, WebRequest request) throws Exception {
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
 				ex.getMessage(), request.getDescription(false));    //we are making use of our own custom exception structure and we are returning it back as the response
