@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,7 +81,13 @@ public class CommentControllerJPA {
 		
 	}
 	
-	//TO DO:delete a comment
+	
+	@DeleteMapping(ApiRoutes.Comment.GET_BY_ID)   //authenticated users can delete their own comments
+	public void deleteComment(@PathVariable int commentId) {
+		
+		commentService.deleteCommentOfUserById(commentId);
+		
+	}
 	
 
 }

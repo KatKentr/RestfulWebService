@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.springboot.rest.webservices.socialmediaapp.exception.CommentNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.exception.PostNotFoundException;
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotAllowedException;
 import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Comment;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
@@ -91,6 +92,29 @@ public class CommentService {
 		}
 		
 		return comm;
+	}
+
+	public void deleteCommentOfUserById(int commentId) {
+		
+		Optional<Comment> comm=commentRepository.findById(commentId);
+		
+		if (comm.isEmpty()) {
+			
+			throw new CommentNotFoundException("id: "+commentId);
+		}
+		
+		User commentUser=comm.get().getUser();
+		
+		User currUser=authService.getCurrentUser();
+		
+		if (commentUser!=currUser) {            //check if the user of the comment is the authenticated user
+			
+			throw new UserNotAllowedException();
+			
+		}
+		
+		commentRepository.deleteById(commentId); 
+		
 	}
 
 }
