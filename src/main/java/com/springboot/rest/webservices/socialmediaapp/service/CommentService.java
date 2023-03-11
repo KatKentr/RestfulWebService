@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.CommentNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.exception.PostNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Comment;
@@ -22,15 +23,13 @@ import com.springboot.rest.webservices.socialmediaapp.repository.UserRepository;
 public class CommentService {
 	
 	private CommentRepository commentRepository;
-	private UserService userService;     //related to the userService. Maybe to be avoided? Use only methods of the repository?
 	private PostRepository postRepository;
 	private UserRepository userRepository;
 	private AuthService authService;
 
-	public CommentService(CommentRepository commentRepository,UserService userService, PostRepository postRepository,AuthService authService,UserRepository userRepository) {
+	public CommentService(CommentRepository commentRepository, PostRepository postRepository,AuthService authService,UserRepository userRepository) {
 		super();
 		this.commentRepository = commentRepository;
-		this.userService = userService;
 		this.postRepository=postRepository;
 		this.authService=authService;
 		this.userRepository=userRepository;
@@ -56,7 +55,7 @@ public class CommentService {
 		Optional<Post> post=postRepository.findById(postId);
         if (post.isEmpty()) { //if the post does not exist
 			
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post with this id not ");
+			throw new PostNotFoundException("id: "+postId);
 		}
 		
 		return post.get().getComments();
@@ -81,6 +80,17 @@ public class CommentService {
         
         return newComment;
 				
+	}
+
+	public Optional<Comment> getCommentDetails(int commentId) {
+		
+		Optional<Comment> comm=commentRepository.findById(commentId);
+		if (comm.isEmpty()) {  //if comment does not exist
+			
+			throw new CommentNotFoundException("id: "+commentId);
+		}
+		
+		return comm;
 	}
 
 }

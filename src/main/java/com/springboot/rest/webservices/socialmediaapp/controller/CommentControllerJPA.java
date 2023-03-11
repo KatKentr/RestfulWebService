@@ -1,8 +1,14 @@
 package com.springboot.rest.webservices.socialmediaapp.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +46,6 @@ public class CommentControllerJPA {
 	// retrieve all comments of a post
 	@GetMapping(ApiRoutes.Comment.GET_BY_POST)
 	public List<Comment> retrieveCommentsOfPost(@PathVariable int postId) {
-		//TO DO: check that post exists!
 		return commentService.getCommentsFromPost(postId);
 
 	}
@@ -57,6 +62,25 @@ public class CommentControllerJPA {
 	return ResponseEntity.created(location).build();
    }
 	
+	//retrieve a comment
+	@GetMapping(ApiRoutes.Comment.GET_BY_ID)
+	public EntityModel<Comment> getCommentDetails(@PathVariable int commentId){
+		
+		Optional<Comment> comment=commentService.getCommentDetails(commentId);
+		
+		Post post=comment.get().getPost();  //get the post that the commnet relates to 
+		
+        EntityModel<Comment> entityModel = EntityModel.of(comment.get());
+		
+		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrieveCommentsOfPost(post.getId())); // provide a link to  the consumer of the API to inform on how to retrieve all comments of a post	
+																									
+		entityModel.add(link.withRel("all-comments-of-this-post"));
+
+		return entityModel;
+		
+	}
 	
+	//TO DO:delete a comment
 	
+
 }
