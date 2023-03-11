@@ -38,7 +38,7 @@ public class CommentControllerJPA {
 	}
 
 	// retrieve all comments of a post
-	@GetMapping(path = "jpa/posts/{postId}/comments")
+	@GetMapping(ApiRoutes.Comment.GET_BY_POST)
 	public List<Comment> retrieveCommentsOfPost(@PathVariable int postId) {
 		//TO DO: check that post exists!
 		return commentService.getCommentsFromPost(postId);
@@ -47,13 +47,13 @@ public class CommentControllerJPA {
 	
 	//create a new comment.
 	//According to the current schema a comment is related to a user and and a post -> Both are foreign keys
-	//We can relate the comment to a specific post by using the postId path variable. But how can we relate the comment to a specific user?
-	@PostMapping(path = "jpa/posts/{postId}/comments")
-	public ResponseEntity<Post> createPostForUser(@Valid @RequestBody Comment commment,@PathVariable int postId) {
+	//The authenticated user can create a comment to a post
+	@PostMapping(ApiRoutes.Comment.CREATE)
+	public ResponseEntity<Comment> createCommentForUser(@Valid @RequestBody Comment commment,@PathVariable int postId) {
 
 	Comment newComment=commentService.saveNewComment(commment, postId);
 	URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newComment.getId())
-				.toUri(); // build the URI for the ne post
+				.toUri(); // build the URI for the new comment
 	return ResponseEntity.created(location).build();
    }
 	

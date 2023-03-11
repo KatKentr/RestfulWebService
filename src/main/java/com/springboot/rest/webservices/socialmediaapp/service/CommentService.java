@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.PostNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.Comment;
 import com.springboot.rest.webservices.socialmediaapp.model.Post;
@@ -64,14 +65,14 @@ public class CommentService {
 	
 	public Comment saveNewComment(Comment comment, int postId) {  //save a new comment
 		
-		//relate the new comment to a user and to a post
+		//relate the new comment to the authenticated user and to a post
 		User commentUser=authService.getCurrentUser();
     
 				
 		Optional<Post> post=postRepository.findById(postId);
         if (post.isEmpty()) { //if the post does not exist
 			
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Post with this id not ");
+			throw new PostNotFoundException("id: "+postId);
 		}
         
         comment.setUser(commentUser);
