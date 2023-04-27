@@ -2,6 +2,8 @@ package com.springboot.rest.webservices.socialmediaapp.model;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
