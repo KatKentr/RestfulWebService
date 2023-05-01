@@ -29,7 +29,7 @@ public class Comment {
 	private Post post;
 	
 	
-     private Comment() {  //default constructor. Public or private?
+     public Comment() {  //default constructor. Public or private?
     	 		
 	  }
 
