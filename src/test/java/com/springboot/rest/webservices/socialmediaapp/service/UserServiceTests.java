@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
+import org.mockito.ArgumentCaptor;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
@@ -89,6 +91,18 @@ public class UserServiceTests {
     //TO DO:
     @Test
     public void deleteUserTest(){
+
+//       when(userRepository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
+
+ //Following approach, adapted from: https://github.com/SalithaUCSC/spring-boot-testing/blob/main/src/test/java/com/rest/order/OrderServiceUnitTest.java . Not clear though
+
+        userService.deleteUser(user.getId());
+        verify(userRepository, times(1)).deleteById(user.getId());
+        ArgumentCaptor<Integer> userArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(userRepository).deleteById(userArgumentCaptor.capture());
+        int userIdDeleted = userArgumentCaptor.getValue();
+        assertNotNull(userIdDeleted);
+        assertEquals(1, userIdDeleted);
 
     }
 
