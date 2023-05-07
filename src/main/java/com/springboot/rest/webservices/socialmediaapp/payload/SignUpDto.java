@@ -1,7 +1,10 @@
 package com.springboot.rest.webservices.socialmediaapp.payload;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
+import com.springboot.rest.webservices.socialmediaapp.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Past;
@@ -24,9 +27,9 @@ public class SignUpDto {
     private String password;
 	
 	@NotEmpty                 //an initial naive approach for roles
-    private String roles;
+    private Set<Role> roles;
     
-	public SignUpDto(LocalDate birthDate, String username, String email, String password, String roles) {
+	public SignUpDto(LocalDate birthDate, String username, String email, String password, Set<Role> roles) {
 		super();
 		this.birthDate = birthDate;
 		this.username = username;
@@ -58,10 +61,10 @@ public class SignUpDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(String roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
     

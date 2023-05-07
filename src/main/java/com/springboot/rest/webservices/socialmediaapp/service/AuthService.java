@@ -1,5 +1,7 @@
 package com.springboot.rest.webservices.socialmediaapp.service;
 
+import com.springboot.rest.webservices.socialmediaapp.model.Role;
+import com.springboot.rest.webservices.socialmediaapp.repository.RoleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,19 +20,30 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
+
 @Service
 public class AuthService {
 	
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private AuthenticationManager authenticationManager;
-	
+
+	private RoleRepository roleRepository;
 		
-	public AuthService(UserRepository userRepository,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager) {
+	public AuthService(UserRepository userRepository,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager,RoleRepository roleRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.authenticationManager=authenticationManager;
 		this.passwordEncoder=passwordEncoder;
+		this.roleRepository=roleRepository;
 	}
 	
 	
@@ -64,8 +77,11 @@ public class AuthService {
         user.setName(signUpDto.getName());
         user.setEmail(signUpDto.getEmail());
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
-        user.setRoles(signUpDto.getRoles());
-        
+        //user.setRoles(signUpDto.getRoles());
+		Set<Role> roles=signUpDto.getRoles();
+
+		Set<Role> user_roles=roles.stream().map(r -> roleRepository.findByRoleType(r.getRole_type()).get()).collect(toSet());
+        user.setRoles(user_roles);
         userRepository.save(user);
    			
 	}

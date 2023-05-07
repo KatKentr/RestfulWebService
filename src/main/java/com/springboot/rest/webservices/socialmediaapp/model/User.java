@@ -2,15 +2,11 @@ package com.springboot.rest.webservices.socialmediaapp.model;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
@@ -49,8 +45,12 @@ public class User {
 	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,orphanRemoval = true)   //the field in the Comment class that owns this relationship. CascadeType.All and orphanRemoval true: Child entities (comment) of a user (parent entity) will be deleted, when the user is deleted
 	@JsonIgnore                //we don't want post to be part of the json reponses for the user bean
 	private List<Comment> comments;
-	
-	private String  roles;
+
+
+	@ManyToMany()   //cascade = CascadeType.ALL it is not correct though. Adding a new user with a role attribute, adds a new role entry in the roles table and Removing the user, deletes the role entry in the roles table (the second parent entity). The roles table should have predefined entries(specifc roles) that remain unaffected when new users are added or deleted
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Set<Role> roles;
 	
 	
 	public User() {   //we need a default constructor when we make use of jpa
@@ -58,14 +58,14 @@ public class User {
 	}
 	
 	
-	public User(Integer id, String name, LocalDate date, String email,String password, String roles) {
+	public User(Integer id, String name, LocalDate date, String email,String password) {
 		super();
 		this.id = id;
 		this.username = name;
 		this.date = date;
 		this.email=email;
 		this.password=password;
-		this.roles=roles;
+
 	}
 
 
@@ -139,16 +139,22 @@ public class User {
 		this.password = password;
 	}
 
-	
-	public String getRoles() {
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-
-	public void setRoles(String roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-
 
 	@Override
 	public String toString() {

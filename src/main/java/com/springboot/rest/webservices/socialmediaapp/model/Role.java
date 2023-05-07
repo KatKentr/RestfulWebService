@@ -3,16 +3,25 @@ package com.springboot.rest.webservices.socialmediaapp.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name="roles")
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer id;
 
-    private String role_type;
+    private String roleType;
 
+
+    @ManyToMany(mappedBy = "roles",fetch= FetchType.LAZY)
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        return users;
+    }
 
     public Integer getId() {
         return id;
@@ -23,10 +32,12 @@ public class Role {
     }
 
     public String getRole_type() {
-        return role_type;
+        return roleType;
     }
 
-    public void setRole_type(String role_type) {
-        this.role_type = role_type;
+    public void setRole_type(String roleType) {
+        this.roleType = roleType;
     }
+
+
 }
