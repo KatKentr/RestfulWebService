@@ -48,6 +48,7 @@ public class User {
 
 
 	@ManyToMany()   //cascade = CascadeType.ALL it is not correct though. Adding a new user with a role attribute, adds a new role entry in the roles table and Removing the user, deletes the role entry in the roles table (the second parent entity). The roles table should have predefined entries(specifc roles) that remain unaffected when new users are added or deleted
+	//@JsonIgnore
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;

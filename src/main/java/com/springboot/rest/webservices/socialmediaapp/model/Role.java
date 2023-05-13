@@ -1,6 +1,7 @@
 package com.springboot.rest.webservices.socialmediaapp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -16,7 +17,8 @@ public class Role {
     private String roleType;
 
 
-    @ManyToMany(mappedBy = "roles",fetch= FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<User> users;
 
     public Set<User> getUsers() {

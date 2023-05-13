@@ -51,7 +51,9 @@ public class SecurityConfig {
 				auth ->auth
 				.requestMatchers(ApiRoutes.Auth.REGISTER).permitAll()
 				.requestMatchers(ApiRoutes.Auth.LOGIN).permitAll()
-				.anyRequest().authenticated()
+						//.requestMatchers("/app/v1/users").hasAuthority("user_role")
+						.requestMatchers("/app/v1/users").permitAll()
+						.anyRequest().authenticated()
 				);
 	//We want to enable basic authentication
 		http.httpBasic(withDefaults());
