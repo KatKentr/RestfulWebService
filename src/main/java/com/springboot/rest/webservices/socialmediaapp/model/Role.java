@@ -14,8 +14,18 @@ public class Role {
     @GeneratedValue
     private Integer id;
 
-    private String roleType;
+    private String name;
 
+    public Role() { }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
+    public Role(Integer id) {
+        super();
+        this.id = id;
+    }
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
@@ -33,12 +43,17 @@ public class Role {
         this.id = id;
     }
 
-    public String getRole_type() {
-        return roleType;
+    public String getName() {
+        return name;
     }
 
-    public void setRole_type(String roleType) {
-        this.roleType = roleType;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 
 
