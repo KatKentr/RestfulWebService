@@ -1,6 +1,8 @@
 package com.springboot.rest.webservices.socialmediaapp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -9,6 +11,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 //@Data
 //@NoArgsConstructor
@@ -17,7 +22,7 @@ import jakarta.validation.constraints.Size;
 
 //@Builder
 @Entity(name="user_details")     //User is a keyword in postgres and h2. Errors encountered, hence table name should be changed
-public class User {              
+public class User implements UserDetails {
 	
     @Id
     @GeneratedValue
@@ -79,17 +84,6 @@ public class User {
 		this.id = id;
 	}
 
-
-	public String getName() {
-		return username;
-	}
-
-
-	public void setName(String name) {
-		this.username = name;
-	}
-
-
 	public LocalDate getDate() {
 		return date;
 	}
@@ -131,6 +125,15 @@ public class User {
 	}
 
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
+		}
+		return authorities;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -145,6 +148,26 @@ public class User {
 		return username;
 	}
 
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -155,6 +178,10 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public void addRole(Role role) {
+		this.roles.add(role);
 	}
 
 	@Override
