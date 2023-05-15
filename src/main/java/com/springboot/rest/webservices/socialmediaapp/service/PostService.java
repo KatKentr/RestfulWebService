@@ -44,7 +44,9 @@ public class PostService {
 	//Would this approach be more correct? method arguments: int userId, String description, instantiate the new Post object and then save it?
 	public Post saveNewPost(Post post) {                //add a new post for a user
 	    //find the user
+		System.out.println("inside saveNewPost method");
 		User user=authService.getCurrentUser();
+		System.out.println("got current user" +user.getEmail());
 		post.setUser(user);   //relate the post to the user
 		Post newPost= postRepository.save(post);   //save the new post.
 		return newPost;
