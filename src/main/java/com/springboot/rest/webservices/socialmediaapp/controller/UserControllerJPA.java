@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class UserControllerJPA {
 	}
 
 	@GetMapping(ApiRoutes.User.GET_ALL)
+	@RolesAllowed("ROLE_USER")
 	public List<User> retrieveAllUsers() {
 
 		return userService.getAllUsers();

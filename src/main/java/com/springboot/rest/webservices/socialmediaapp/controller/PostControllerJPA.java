@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,7 @@ public class PostControllerJPA {
 
 	// create a new Post
 	@PostMapping(ApiRoutes.Post.CREATE)
+	@RolesAllowed("ROLE_USER")
 	public ResponseEntity<Post> createPostForUser(@Valid @RequestBody Post post) {
 
 		Post newPost = postService.saveNewPost(post);
