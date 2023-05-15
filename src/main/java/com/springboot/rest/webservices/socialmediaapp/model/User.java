@@ -1,10 +1,7 @@
 package com.springboot.rest.webservices.socialmediaapp.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -56,7 +53,7 @@ public class User implements UserDetails {
 	//@JsonIgnore
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Set<Role> roles;
+	private Set<Role> roles=new HashSet<>();
 	
 	
 	public User() {   //we need a default constructor when we make use of jpa
