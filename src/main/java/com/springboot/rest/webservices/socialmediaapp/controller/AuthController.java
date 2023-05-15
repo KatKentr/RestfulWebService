@@ -2,6 +2,7 @@ package com.springboot.rest.webservices.socialmediaapp.controller;
 
 import java.net.URI;
 
+import com.springboot.rest.webservices.socialmediaapp.payload.AuthRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,9 +32,14 @@ public class AuthController {
     }
 
   
+//    @PostMapping(ApiRoutes.Auth.LOGIN)
+//    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginDto loginDto){
+//       return authService.login(loginDto);
+//    }
+
     @PostMapping(ApiRoutes.Auth.LOGIN)
-    public ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginDto loginDto){
-       return authService.login(loginDto);
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthRequest request){
+        return authService.login(request);
     }
     
     @PostMapping(ApiRoutes.Auth.REGISTER)
