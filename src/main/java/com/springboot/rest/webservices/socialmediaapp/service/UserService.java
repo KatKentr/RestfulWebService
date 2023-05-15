@@ -15,9 +15,9 @@ public class UserService {
 	
 	UserRepository userRepository;
 	
-	public UserService(UserRepository userepository) {  //constructor-based injection
+	public UserService(UserRepository userRepository) {  //constructor-based injection
 		
-		this.userRepository=userepository;
+		this.userRepository=userRepository;
 			
 	}
 	
