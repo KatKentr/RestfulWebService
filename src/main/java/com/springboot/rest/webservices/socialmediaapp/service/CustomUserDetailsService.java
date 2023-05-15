@@ -19,7 +19,7 @@ import com.springboot.rest.webservices.socialmediaapp.repository.UserRepository;
 
 
 
-@Service
+//@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
 	private UserRepository userRepository;
@@ -32,9 +32,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
 		
 		  User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+
 	                 .orElseThrow(() ->
 	                         new UsernameNotFoundException("User not found with username or email: "+ usernameOrEmail));
-		
+		System.out.println("Inside loadUserByUsername method");
+		  System.out.println(user.getUsername());
+		System.out.println(user.getEmail());
+		System.out.println(user.getRoles().isEmpty());
+		user.getRoles().stream().forEach(r->System.out.println(r.getId()+r.getName()));
 	       return new org.springframework.security.core.userdetails.User(user.getEmail(),
 	       user.getPassword(), getAuthorities(user.getRoles()));                     		 
 		
@@ -53,7 +58,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	private Set<GrantedAuthority> getAuthorities(Set<Role> roles){
 
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRole_type())).collect(Collectors.toSet());
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
 
 	}
 
