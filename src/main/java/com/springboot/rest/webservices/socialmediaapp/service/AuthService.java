@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -116,13 +117,26 @@ public class AuthService {
 	
 	
 	//retrieve current user
-	public User getCurrentUser() {
-        var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"E-mail not found"));
-    }
-	
+//	public User getCurrentUser() {
+//        var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"E-mail not found"));
+//    }
 	
 
+	//retrieve the current user from the security context holder
+     public User getCurrentUser(){
+
+		System.out.println("inside getCurrentUser");
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 User userDetails = (User) authentication.getPrincipal();
+
+// getUsername() - Returns the username used to authenticate the user.
+		 System.out.println("User name: " + userDetails.getUsername());  //returns null, why?? try to print userDetails.getEmail() instead
+
+// getAuthorities() - Returns the authorities granted to the user.
+		 System.out.println("User has authorities: " + userDetails.getAuthorities());
+		 return userDetails;
+	 }
 	
 
 }
