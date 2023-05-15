@@ -1,9 +1,15 @@
 package com.springboot.rest.webservices.socialmediaapp.service;
 
+import com.springboot.rest.webservices.socialmediaapp.jwt.JwtTokenUtil;
 import com.springboot.rest.webservices.socialmediaapp.model.Role;
+import com.springboot.rest.webservices.socialmediaapp.payload.AuthRequest;
+import com.springboot.rest.webservices.socialmediaapp.payload.AuthResponse;
 import com.springboot.rest.webservices.socialmediaapp.repository.RoleRepository;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +43,9 @@ public class AuthService {
 	private AuthenticationManager authenticationManager;
 
 	private RoleRepository roleRepository;
+
+	@Autowired
+	JwtTokenUtil jwtUtil;
 		
 	public AuthService(UserRepository userRepository,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager,RoleRepository roleRepository) {
 		super();
@@ -47,14 +56,33 @@ public class AuthService {
 	}
 	
 	
-	public ResponseEntity<String> login(LoginDto loginDto){
-		
-		 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-	                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+//	public ResponseEntity<String> login(LoginDto loginDto){
+//
+//		 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//	                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+//         System.out.println("inside login method");
+//	        SecurityContextHolder.getContext().setAuthentication(authentication);
+//	        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+//
+//	}
 
-	        SecurityContextHolder.getContext().setAuthentication(authentication);
-	        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
-				
+
+	public ResponseEntity<?> login(@Valid AuthRequest request) {
+		try {
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(
+							request.getEmail(), request.getPassword())
+			);
+
+			User user = (User) authentication.getPrincipal();
+			String accessToken = jwtUtil.generateAccessToken(user);
+			AuthResponse response = new AuthResponse(user.getEmail(), accessToken);
+			System.out.println("inside login method "+user.getRoles());
+			return ResponseEntity.ok().body(response);
+
+		} catch (BadCredentialsException ex) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
 	}
 
 
@@ -74,13 +102,13 @@ public class AuthService {
         // create user object
         User user = new User();
         user.setDate(signUpDto.getDate());
-        user.setName(signUpDto.getName());
+        user.setUsername(signUpDto.getName());
         user.setEmail(signUpDto.getEmail());
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         //user.setRoles(signUpDto.getRoles());
 		Set<Role> roles=signUpDto.getRoles();
 
-		Set<Role> user_roles=roles.stream().map(r -> roleRepository.findByRoleType(r.getRole_type()).get()).collect(toSet());
+		Set<Role> user_roles=roles.stream().map(r -> roleRepository.findByName(r.getName()).get()).collect(toSet());
         user.setRoles(user_roles);
         userRepository.save(user);
    			
