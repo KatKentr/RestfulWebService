@@ -128,10 +128,11 @@ public class AuthService {
 
 		System.out.println("inside getCurrentUser");
 		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		 User userDetails = (User) authentication.getPrincipal();
+		 User userDetails = (User) authentication.getPrincipal(); //we retrieve email and roles
 
-// getUsername() - Returns the username used to authenticate the user.
-		 System.out.println("User name: " + userDetails.getUsername());  //returns null, why?? try to print userDetails.getEmail() instead
+// getEmail() - Returns the e-mail used to authenticate the user.
+		 //System.out.println("User name: " + userDetails.getUsername());   //returns null. username is not retrieved from the authenticated principal
+		 System.out.println("User name: " + userDetails.getEmail());
 
 // getAuthorities() - Returns the authorities granted to the user.
 		 System.out.println("User has authorities: " + userDetails.getAuthorities());
