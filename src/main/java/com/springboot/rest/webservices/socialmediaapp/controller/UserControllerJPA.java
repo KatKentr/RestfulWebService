@@ -12,6 +12,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,6 +54,8 @@ public class UserControllerJPA {
 	// we wrap the User class and create an EntityModel in order to use Spring
 	// HATEOAS: Generate HAL responses with hyperlinks to resources
 	@GetMapping(ApiRoutes.User.GET_BY_ID)
+    //@RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+	//@PreAuthorize("hasRole('ROLE_USER')")                //just playing around to check the result of the annotations
 	public EntityModel<User> retrieveUser(@PathVariable int id) {
 
 		Optional<User> user = userService.getUserById(id);
@@ -67,8 +70,9 @@ public class UserControllerJPA {
 
 	}
 
-	//TO DO: Only users with role ADMIN will be able to delete users
+
 	@DeleteMapping(ApiRoutes.User.GET_BY_ID)
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void deleteUser(@PathVariable int id) {
 
 		userService.deleteUser(id);
