@@ -4,6 +4,7 @@ package com.springboot.rest.webservices.socialmediaapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,7 +30,7 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private Set<User> users;
+    private Set<User> users=new HashSet<>();
 
     public Set<User> getUsers() {
         return users;
@@ -49,6 +50,10 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addUser(User user) {
+        this.users.add(user);
     }
 
     @Override
