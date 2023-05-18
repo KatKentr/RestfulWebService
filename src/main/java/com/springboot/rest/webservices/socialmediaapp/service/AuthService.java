@@ -111,6 +111,7 @@ public class AuthService {
 
 		Set<Role> user_roles=roles.stream().map(r -> roleRepository.findByName(r.getName()).get()).collect(toSet());
         user.setRoles(user_roles);
+        user_roles.forEach(r-> r.addUser(user));                            //update also the set of users for each role
         userRepository.save(user);
    			
 	}
