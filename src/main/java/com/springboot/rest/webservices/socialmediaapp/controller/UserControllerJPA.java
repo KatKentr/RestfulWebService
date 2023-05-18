@@ -45,7 +45,6 @@ public class UserControllerJPA {
 	}
 
 	@GetMapping(ApiRoutes.User.GET_ALL)
-	@RolesAllowed("ROLE_USER")
 	public List<User> retrieveAllUsers() {
 
 		return userService.getAllUsers();
