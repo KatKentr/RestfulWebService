@@ -1,3 +1,4 @@
+/*
 insert into user_details(id,name,date)
 values(10001, 'Katerina',current_date());
 
@@ -18,3 +19,4 @@ values(20003,'I want to get Aws certified', 10002);
 
 insert into post(id,description,user_id)
 values(20004,'I Want to learn Java', 10002);
+*/
