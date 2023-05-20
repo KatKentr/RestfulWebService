@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
-import com.springboot.rest.webservices.socialmediaapp.model.UserNotFoundException;
 
 import jakarta.validation.Valid;
 
@@ -72,7 +72,7 @@ public class UserController {
 		
 	}
 	
-	
+	//TO DO: Only users with role ADMIN will be able to delete users
 	@DeleteMapping(path="/users/{id}")
 	public void deleteUser(@PathVariable int id){
 		
