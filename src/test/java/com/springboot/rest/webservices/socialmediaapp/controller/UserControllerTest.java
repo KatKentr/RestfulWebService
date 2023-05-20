@@ -30,9 +30,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -60,13 +58,22 @@ public class UserControllerTest {
 
     @Before
     public void init(){
+
+        Set<Role> roles=new HashSet<>();       //set the roles
+        Role role1=new Role("ROLE_USER");
+        role1.setId(1);
+        Role role2=new Role("ROLE_ADMIN");
+        role2.setId(2);
+        roles.add(role1);
+        roles.add(role2);
+
         user1=new User();
         user1.setUsername("Katerina");
         user1.setDate(LocalDate.of( 2018 , Month.JANUARY , 23));
         user1.setEmail("katerina@example.com");
         user1.setPassword("1234");
-        user1.addRole(new Role("ROLE_USER"));
-        user1.addRole(new Role("ROLE_ADMIN"));
+        user1.addRole(role1);
+        user1.addRole(role2);
         user1.setId(1);
 
         user2 = new User();
@@ -74,7 +81,7 @@ public class UserControllerTest {
         user2.setDate(LocalDate.of( 2018 , Month.JANUARY , 23));
         user2.setEmail("nene@example.com");
         user2.setPassword("1234");
-        user2.addRole(new Role("ROLE_USER"));
+        user2.addRole(role2);
         user2.setId(2);
         //System.out.println(user2.getId());
     }
@@ -84,7 +91,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Should return all users, when an authenticated user requests the api")
-    @WithMockUser(username = "NewAdminUser",password="1234", authorities = { "ROLE_USER", "ROLE_ADMIN" })
+    @WithMockUser(username = "NewAdminUser",password="1234", authorities = { "ROLE_USER", "ROLE_ADMIN" })  //represents an authenticated user
     public void retreiveAllUsersshouldReturnAllUsers() throws Exception {
         ArrayList<User> users= new ArrayList<>();
         users.add(user1);
