@@ -8,12 +8,14 @@ import com.springboot.rest.webservices.socialmediaapp.model.User;
 import com.springboot.rest.webservices.socialmediaapp.service.UserService;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Test;
+//import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,6 +27,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.lang.reflect.Array;
@@ -32,15 +35,20 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 
+import static javax.management.Query.value;
+import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@SpringBootTest               //Working with Junit4 here
-@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@RunWith(SpringRunner.class)
 @WebMvcTest(UserControllerJPA.class)    //instantiate only one controller
 public class UserControllerTest {
 
@@ -56,7 +64,7 @@ public class UserControllerTest {
     @MockBean
     private JwtTokenUtil jwtDecoder;
 
-    @Before
+    @BeforeEach
     public void init(){
 
         Set<Role> roles=new HashSet<>();       //set the roles
@@ -83,7 +91,7 @@ public class UserControllerTest {
         user2.setPassword("1234");
         user2.addRole(role2);
         user2.setId(2);
-        //System.out.println(user2.getId());
+        System.out.println("Inside before each");
     }
 
 
@@ -108,6 +116,28 @@ public class UserControllerTest {
                   .andDo(print())
                   .andExpect(status().isOk())
                    .andExpect(jsonPath("$", hasSize(users.size())));
+    }
+
+
+    @Test
+    @WithMockUser(username = "NewAdminUser",password="1234", authorities = { "ROLE_USER", "ROLE_ADMIN" })  //represents an authenticated user
+    public void retrieveUserByIdWhenUserExists() throws Exception{
+
+       //when(userService.getUserById(user1.getId()).thenReturn(Optional.ofNullable(user1)));   //encountered error due to Optional
+
+      doReturn(Optional.of(user1)).when(userService).getUserById(user1.getId());  //It worked!!
+
+     this.mockMvc.perform(get(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId())))   //we pass user's id as path variable
+                 //.accept(MediaType.APPLICATION_JSON)
+                  .andDo(print())
+                 .andExpect(status().isOk())
+                //.andExpect(jsonPath("$", hasSize(1)))   TODO: verify that the link provided to retrieve all users is also present!
+                .andExpect(jsonPath("$.username",equalTo(user1.getUsername())))
+                 .andExpect(jsonPath("$.email", equalTo(user1.getEmail())));
+
+
+
+
     }
 
 
