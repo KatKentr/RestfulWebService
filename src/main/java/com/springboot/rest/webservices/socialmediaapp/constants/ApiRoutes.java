@@ -2,6 +2,8 @@ package com.springboot.rest.webservices.socialmediaapp.constants;
 
 public class ApiRoutes {
 
+	public static final String LOCAL_HOST = "localhost";
+
 	private static final String versionPrefix = "/app/v1";
 
 	public static class Auth {
