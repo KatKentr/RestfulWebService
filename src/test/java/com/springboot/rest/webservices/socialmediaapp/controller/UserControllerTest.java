@@ -7,6 +7,7 @@ import com.springboot.rest.webservices.socialmediaapp.model.Role;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
 import com.springboot.rest.webservices.socialmediaapp.service.UserService;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 //import org.junit.Test;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
@@ -46,8 +48,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
-//@SpringBootTest
+//@SpringBootTest1
 //@RunWith(SpringRunner.class)
 @WebMvcTest(UserControllerJPA.class)    //instantiate only one controller
 public class UserControllerTest {
@@ -91,7 +94,7 @@ public class UserControllerTest {
         user2.setPassword("1234");
         user2.addRole(role2);
         user2.setId(2);
-        System.out.println("Inside before each");
+        //System.out.println("Inside before each");
     }
 
 
@@ -120,6 +123,7 @@ public class UserControllerTest {
 
 
     @Test
+    @DisplayName("Should return the user by id,when the user exists and when an authenticated user requests the api")
     @WithMockUser(username = "NewAdminUser",password="1234", authorities = { "ROLE_USER", "ROLE_ADMIN" })  //represents an authenticated user
     public void retrieveUserByIdWhenUserExists() throws Exception{
 
@@ -128,12 +132,15 @@ public class UserControllerTest {
       doReturn(Optional.of(user1)).when(userService).getUserById(user1.getId());  //It worked!!
 
      this.mockMvc.perform(get(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId())))   //we pass user's id as path variable
-                 //.accept(MediaType.APPLICATION_JSON)
+
                   .andDo(print())
                  .andExpect(status().isOk())
                 //.andExpect(jsonPath("$", hasSize(1)))   TODO: verify that the link provided to retrieve all users is also present!
+             .andExpect(MockMvcResultMatchers.content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$.username",equalTo(user1.getUsername())))
-                 .andExpect(jsonPath("$.email", equalTo(user1.getEmail())));
+                 .andExpect(jsonPath("$.email", equalTo(user1.getEmail())))
+                    .andExpect(jsonPath("$._links.all-users.href", Matchers.is("http://"+ApiRoutes.LOCAL_HOST+ApiRoutes.User.GET_ALL)));
+
 
 
 
