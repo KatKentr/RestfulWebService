@@ -3,6 +3,7 @@ package com.springboot.rest.webservices.socialmediaapp.controller;
 
 import com.springboot.rest.webservices.socialmediaapp.TestUtils;
 import com.springboot.rest.webservices.socialmediaapp.constants.ApiRoutes;
+import com.springboot.rest.webservices.socialmediaapp.exception.UserNotFoundException;
 import com.springboot.rest.webservices.socialmediaapp.jwt.JwtTokenUtil;
 import com.springboot.rest.webservices.socialmediaapp.model.Role;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
@@ -41,7 +42,9 @@ import java.util.*;
 import static javax.management.Query.value;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -128,6 +131,30 @@ public class UserControllerTest {
 
     //TODO: test method for findUserById when user does not exist
     //TODO: tests for unthaunticated users?
+
+
+    @Test
+    @DisplayName("Should return the userNotFoundException,when the user does not exists and an authenticated user requests the api")
+    @WithMockUser(username = "NewAdminUser",password="1234", authorities = { "ROLE_USER", "ROLE_ADMIN" })
+    public void retrieveUserByIdWhenUserNotExists() throws Exception{
+
+
+        given(userService.getUserById(user1.getId()))
+                .willThrow(new UserNotFoundException("id: "+user1.getId()));
+
+        this.mockMvc.perform(get(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId())))   //we pass user's id as path variable
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                //.andExpect(jsonPath("$.message", containsString("id: "+user1.getId())))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserNotFoundException))
+                .andExpect(result ->jsonPath("$.message", containsString(result.getResolvedException()
+                        .getMessage()+"id: "+user1.getId())));
+
+
+
+
+    }
 
 
 
