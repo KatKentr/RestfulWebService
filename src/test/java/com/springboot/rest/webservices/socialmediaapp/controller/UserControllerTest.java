@@ -1,6 +1,7 @@
 package com.springboot.rest.webservices.socialmediaapp.controller;
 
 
+import com.springboot.rest.webservices.socialmediaapp.TestUtils;
 import com.springboot.rest.webservices.socialmediaapp.constants.ApiRoutes;
 import com.springboot.rest.webservices.socialmediaapp.jwt.JwtTokenUtil;
 import com.springboot.rest.webservices.socialmediaapp.model.Role;
@@ -61,6 +62,8 @@ public class UserControllerTest {
 
     private User user1,user2;
 
+    private TestUtils testUtils;
+
     @MockBean
     private UserService userService;
 
@@ -70,31 +73,13 @@ public class UserControllerTest {
     @BeforeEach
     public void init(){
 
-        Set<Role> roles=new HashSet<>();       //set the roles
-        Role role1=new Role("ROLE_USER");
-        role1.setId(1);
-        Role role2=new Role("ROLE_ADMIN");
-        role2.setId(2);
-        roles.add(role1);
-        roles.add(role2);
+        testUtils=new TestUtils();  //instantiate testUtils
 
-        user1=new User();
-        user1.setUsername("Katerina");
-        user1.setDate(LocalDate.of( 2018 , Month.JANUARY , 23));
-        user1.setEmail("katerina@example.com");
-        user1.setPassword("1234");
-        user1.addRole(role1);
-        user1.addRole(role2);
-        user1.setId(1);
 
-        user2 = new User();
-        user2.setUsername("Nene");
-        user2.setDate(LocalDate.of( 2018 , Month.JANUARY , 23));
-        user2.setEmail("nene@example.com");
-        user2.setPassword("1234");
-        user2.addRole(role2);
-        user2.setId(2);
-        //System.out.println("Inside before each");
+        user1=testUtils.createUserWithBothRoles();   //user1 has authorities: ROLE_USER, ROLE_ADMIN
+        user2=testUtils.createUserwithRoleUser();   //user2 has authorities: ROLE_USER
+
+
     }
 
 
@@ -108,7 +93,7 @@ public class UserControllerTest {
         users.add(user1);
         users.add(user2);
 
-        users.forEach(m-> System.out.println(m.getRoles()));
+        //users.forEach(m-> System.out.println(m.getRoles()));
 
         when(userService.getAllUsers()).thenReturn(users);
 
@@ -135,17 +120,14 @@ public class UserControllerTest {
 
                   .andDo(print())
                  .andExpect(status().isOk())
-                //.andExpect(jsonPath("$", hasSize(1)))   TODO: verify that the link provided to retrieve all users is also present!
              .andExpect(MockMvcResultMatchers.content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$.username",equalTo(user1.getUsername())))
                  .andExpect(jsonPath("$.email", equalTo(user1.getEmail())))
-                    .andExpect(jsonPath("$._links.all-users.href", Matchers.is("http://"+ApiRoutes.LOCAL_HOST+ApiRoutes.User.GET_ALL)));
-
-
-
-
-
+                    .andExpect(jsonPath("$._links.all-users.href", Matchers.is("http://"+ApiRoutes.LOCAL_HOST+ApiRoutes.User.GET_ALL))); //verify that the link provided, as part of the json reponse, to retrieve all users is also present!
     }
+
+    //TODO: test method for findUserById when user does not exist
+    //TODO: tests for unthaunticated users?
 
 
 
