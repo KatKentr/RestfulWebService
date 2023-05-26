@@ -61,7 +61,7 @@ public class ApplicationSecurity {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .requestMatchers(ApiRoutes.Auth.LOGIN, ApiRoutes.Auth.REGISTER, "/users").permitAll()
+                .requestMatchers(ApiRoutes.Auth.LOGIN, ApiRoutes.Auth.REGISTER).permitAll()
                 .anyRequest().authenticated();
 
         http.exceptionHandling()
