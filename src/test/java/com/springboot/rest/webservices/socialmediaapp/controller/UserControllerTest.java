@@ -9,6 +9,7 @@ import com.springboot.rest.webservices.socialmediaapp.model.Role;
 import com.springboot.rest.webservices.socialmediaapp.model.User;
 import com.springboot.rest.webservices.socialmediaapp.service.UserService;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 //import org.junit.Test;
@@ -25,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.StreamingHttpOutputMessage;
 import org.springframework.security.config.http.MatcherType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -33,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
@@ -41,14 +44,14 @@ import java.util.*;
 
 import static javax.management.Query.value;
 import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -129,7 +132,6 @@ public class UserControllerTest {
                     .andExpect(jsonPath("$._links.all-users.href", Matchers.is("http://"+ApiRoutes.LOCAL_HOST+ApiRoutes.User.GET_ALL))); //verify that the link provided, as part of the json reponse, to retrieve all users is also present!
     }
 
-    //TODO: test method for findUserById when user does not exist
     //TODO: tests for unthaunticated users?
 
 
@@ -151,10 +153,36 @@ public class UserControllerTest {
                 .andExpect(result ->jsonPath("$.message", containsString(result.getResolvedException()
                         .getMessage()+"id: "+user1.getId())));
 
+    }
+
+
+    //Test case: is authenticated and authorized to delete a user
+
+    @Test
+    //@WithMockUser(authorities = "ROLE_ADMIN")
+    @WithMockUser(username = "NewAdminUser",password="1234", roles= "USER")
+    public void deleteUserByIdShouldReturn200() throws Exception {
+
+        user1.getAuthorities().forEach(m ->System.out.println(m));
+
+        //deleteUser method is void
+        doNothing().when(userService).deleteUser(user1.getId());
+
+        ResultActions response =this.mockMvc.perform(delete(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId()))   //we pass user's id as path variable
+                .with(csrf()) //provide a CSRF token for the request
+                //.with(jwt())
+                .with(user("aDMIN").password("1234").roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andDo(print())
+                .andExpect(status().isOk());
 
 
 
     }
+
+
+
 
 
 
