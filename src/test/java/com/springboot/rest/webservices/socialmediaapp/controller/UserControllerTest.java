@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.StreamingHttpOutputMessage;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.http.MatcherType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -60,6 +61,7 @@ import static org.springframework.web.servlet.function.RequestPredicates.content
 //@SpringBootTest1
 //@RunWith(SpringRunner.class)
 @WebMvcTest(UserControllerJPA.class)    //instantiate only one controller
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class UserControllerTest {
 
     @Autowired
@@ -156,7 +158,7 @@ public class UserControllerTest {
     }
 
 
-    //Test case: is authenticated and authorized to delete a user
+    //TODO: two test cases: is authenticated and authorized to delete a user and is unauthorized to delete a user
 
     @Test
     //@WithMockUser(authorities = "ROLE_ADMIN")
@@ -171,13 +173,11 @@ public class UserControllerTest {
         ResultActions response =this.mockMvc.perform(delete(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId()))   //we pass user's id as path variable
                 .with(csrf()) //provide a CSRF token for the request
                 //.with(jwt())
-                .with(user("aDMIN").password("1234").roles("USER"))
+                //.with(user("aDMIN").password("1234").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andDo(print())
                 .andExpect(status().isOk());
-
-
 
     }
 
