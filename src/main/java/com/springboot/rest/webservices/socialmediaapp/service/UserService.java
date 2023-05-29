@@ -40,6 +40,11 @@ public class UserService {
 	
 	
 	public void deleteUser(int id) {
+
+		Optional<User> user=userRepository.findById(id);
+
+		if (user.isEmpty())
+			throw new UserNotFoundException("id: "+id);
 		
 		userRepository.deleteById(id);
 	}
