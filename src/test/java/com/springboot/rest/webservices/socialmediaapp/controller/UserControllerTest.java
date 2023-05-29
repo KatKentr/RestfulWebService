@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.StreamingHttpOutputMessage;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.http.MatcherType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -158,8 +159,6 @@ public class UserControllerTest {
     }
 
 
-    //TODO: two test cases: is authenticated and authorized to delete a user and is unauthorized to delete a user
-
     @Test
     @DisplayName("Delete a user api should return 200, when the authenticated user has the authority ROLE_ADMIN")
     @WithMockUser(authorities = {"ROLE_ADMIN","ROLE_USER"})
@@ -178,6 +177,28 @@ public class UserControllerTest {
 
         response.andDo(print())
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @DisplayName("Delete a user api should return 403, when the authenticated user does not have the authority ROLE_ADMIN")
+    @WithMockUser(authorities = {"ROLE_USER"})
+    public void deleteUserByIdShouldReturn403() throws Exception {
+
+        user1.getAuthorities().forEach(m ->System.out.println(m));
+
+        //deleteUser method is void
+        doNothing().when(userService).deleteUser(user1.getId());
+
+        ResultActions response =this.mockMvc.perform(delete(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId()))   //we pass user's id as path variable
+                .with(csrf()) //provide a CSRF token for the request
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof AccessDeniedException))
+        .andExpect(result ->jsonPath("$.message", containsString(result.getResolvedException()
+                .getMessage())));
 
     }
 
