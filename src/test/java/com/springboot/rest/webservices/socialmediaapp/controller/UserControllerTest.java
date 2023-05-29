@@ -161,8 +161,8 @@ public class UserControllerTest {
     //TODO: two test cases: is authenticated and authorized to delete a user and is unauthorized to delete a user
 
     @Test
-    //@WithMockUser(authorities = "ROLE_ADMIN")
-    @WithMockUser(username = "NewAdminUser",password="1234", roles= "USER")
+    @DisplayName("Delete a user api should return 200, when the authenticated user has the authority ROLE_ADMIN")
+    @WithMockUser(authorities = {"ROLE_ADMIN","ROLE_USER"})
     public void deleteUserByIdShouldReturn200() throws Exception {
 
         user1.getAuthorities().forEach(m ->System.out.println(m));
@@ -173,7 +173,7 @@ public class UserControllerTest {
         ResultActions response =this.mockMvc.perform(delete(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId()))   //we pass user's id as path variable
                 .with(csrf()) //provide a CSRF token for the request
                 //.with(jwt())
-                //.with(user("aDMIN").password("1234").roles("USER"))
+                //.with(user("aDMIN").password("1234").roles("USER")) //another approach to set an authenticated user for the request
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andDo(print())
