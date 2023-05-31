@@ -51,6 +51,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -199,6 +200,28 @@ public class UserControllerTest {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof AccessDeniedException))
         .andExpect(result ->jsonPath("$.message", containsString(result.getResolvedException()
                 .getMessage())));
+
+    }
+
+    //checks that userNotFoundException is thrown in case an authorized user hit the deleteByUserId api and the user doe not exist
+
+    @Test
+    @DisplayName("Delete a user api should return exception, when an authenticated and authorized user attempts to delete a non-existing user")
+    @WithMockUser(authorities = {"ROLE_ADMIN"})
+    public void deleteUserByIdWhenUserNotExists() throws Exception {
+
+        doThrow(new UserNotFoundException("id: "+user1.getId())).when(userService).deleteUser(user1.getId());
+
+
+        this.mockMvc.perform(delete(ApiRoutes.User.GET_BY_ID,Integer.toString(user1.getId())))   //we pass user's id as path variable
+                //.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                //.andExpect(jsonPath("$.message", containsString("id: "+user1.getId())))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof UserNotFoundException))
+                .andExpect(result ->jsonPath("$.message", containsString(result.getResolvedException()
+                        .getMessage()+"id: "+user1.getId())));
+
 
     }
 
