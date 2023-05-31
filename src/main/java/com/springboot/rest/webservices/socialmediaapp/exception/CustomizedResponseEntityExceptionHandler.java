@@ -4,6 +4,10 @@ import java.net.http.HttpHeaders;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -57,11 +61,9 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	}
 
 
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(
-			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {    //attempt to display an appropriate error message for invalid input to post request for a new user. Did not work though
-		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), 
-				"Total Errors:" + ex.getErrorCount() + " First Error:" + ex.getFieldError().getDefaultMessage(), request.getDescription(false));
-		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-	}
 
 }
+
+
+
+
