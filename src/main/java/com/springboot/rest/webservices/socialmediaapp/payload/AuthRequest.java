@@ -1,12 +1,15 @@
 package com.springboot.rest.webservices.socialmediaapp.payload;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class AuthRequest {
     @NotNull
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
     @NotNull
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
 
     public AuthRequest() {
