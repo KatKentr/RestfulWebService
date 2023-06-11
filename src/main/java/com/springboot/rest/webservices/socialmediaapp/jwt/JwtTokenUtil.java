@@ -10,6 +10,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/*
+Code taken from a tutorial article written from Nam Ha Minh at CodeJava:
+https://www.codejava.net/frameworks/spring-boot/spring-security-jwt-role-based-authorization
+Source: https://github.com/codejava-official/spring-jwt-authorization retrieved in May 2023
+ */
 
     @Component
     public class JwtTokenUtil {

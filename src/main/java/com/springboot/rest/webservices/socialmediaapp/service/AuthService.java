@@ -67,7 +67,11 @@ public class AuthService {
 //
 //	}
 
-
+	/*
+ Method login taken from a tutorial article written from Nam Ha Minh at CodeJava:
+ https://www.codejava.net/frameworks/spring-boot/spring-security-jwt-role-based-authorization
+ Source: https://github.com/codejava-official/spring-jwt-authorization retrieved in May 2023
+  */
 	public ResponseEntity<?> login(@Valid AuthRequest request) {
 		try {
 			Authentication authentication = authenticationManager.authenticate(

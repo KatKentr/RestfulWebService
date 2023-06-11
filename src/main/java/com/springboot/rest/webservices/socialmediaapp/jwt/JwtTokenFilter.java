@@ -18,6 +18,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import io.jsonwebtoken.Claims;
 import java.io.IOException;
 
+
+/*
+Code taken from a tutorial article written from Nam Ha Minh at CodeJava:
+https://www.codejava.net/frameworks/spring-boot/spring-security-jwt-role-based-authorization
+Source: https://github.com/codejava-official/spring-jwt-authorization retrieved in May 2023
+ */
+
 //To access the secure REST APIs, the client must include an access token in the Authorization header of the request. So we need to insert our own filter in the middle of Spring Security filters chain, before the UsernameAndPasswordAuthenticationFilter, in order to check the Authorization header of each request.
 
 @Component
