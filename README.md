@@ -1,5 +1,5 @@
 
-# [Social-media-app API](https://github.com/KatKentr/RestfulWebService)
+# Social-media-app API
 
 A REST API for a simple social media application built with Spring Boot. Connection to PostgreSQL database.
 Users can register with *admin* and/or *user* role , create and manage own posts and comments on users' posts. Authentication is required for accessing and modifying resources.
