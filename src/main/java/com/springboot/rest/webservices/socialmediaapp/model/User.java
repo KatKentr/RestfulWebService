@@ -56,10 +56,35 @@ public class User implements UserDetails {
 	private Set<Role> roles=new HashSet<>();
 	
 	
-	public User() {   //we need a default constructor when we make use of jpa
-		
+
+
+	//users can follow other users
+	@ManyToMany()
+	@JoinTable(name="users_follows",joinColumns = @JoinColumn(name="user_id",referencedColumnName = "id"),inverseJoinColumns=@JoinColumn(name="follows_user_id",referencedColumnName = "id"))
+	@JsonIgnore
+	private Set<User>  following=new HashSet<>();
+
+    @ManyToMany(mappedBy = "following")
+	private Set<User>  followers=new HashSet<>();
+
+	public void addFollowing(User newUserToFollow){  //add a new user that would like to follow
+
+
+		this.following.add(newUserToFollow);
+		newUserToFollow.followers.add(this);
 	}
-	
+
+	public void removeFollowing(User userToUnfollow){
+
+		this.following.remove(userToUnfollow);
+		userToUnfollow.followers.remove(this);
+	}
+
+
+	public User() {   //we need a default constructor when we make use of jpa
+
+	}
+
 	
 	public User(Integer id, String name, LocalDate date, String email,String password) {
 		super();
@@ -121,6 +146,21 @@ public class User implements UserDetails {
 		this.email = email;
 	}
 
+	public Set<User> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<User> following) {
+		this.following = following;
+	}
+
+	public Set<User> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<User> followers) {
+		this.followers = followers;
+	}
 
 	@Override
 	@JsonIgnore
